@@ -5,7 +5,7 @@ from scipy.linalg import block_diag
 import PyKDL as kdl
 import kdl_parser_py.urdf as kdl_parser
 import robotics_math as rm
-from gait import WalkingGait
+from gait import SimpleWalkingGait
 from leg_kin import Leg
 
 MOTOR_NAMES = [
@@ -83,7 +83,7 @@ class Dog:
             for l1 in lower_legs:
                 if (l1>l0):
                     enableCollision = 1
-                    print("collision for pair",l0,l1, p.getJointInfo(quadruped,l0)[12],p.getJointInfo(quadruped,l1)[12], "enabled=",enableCollision)
+                    print("collision for pair",l0,l1,p.getJointInfo(quadruped,l0)[12],p.getJointInfo(quadruped,l1)[12], "enabled=",enableCollision)
                     p.setCollisionFilterPair(quadruped, quadruped, 2,5,enableCollision)
 
         jointIds=[]
@@ -388,47 +388,24 @@ if __name__=="__main__":
     p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.94e-01])
     p2 = np.array([-1.85e-01, 4.5e-02, -3.94e-01])
 
-    gait_controller = WalkingGait(0.9, p1, p2)
-    L = Leg()
-    T_cycle = 5000
-
+    gait_controller = SimpleWalkingGait(0.9, p1, p2, mode="reverse_crab")
+    T_cycle = 800
 
     joints = []
     start_walk = gait_controller.step(0.0)
-    i=0
-    for po in start_walk:
-        if i < 2:
-            joints.append(L.ik(po, sign=1))
-        else:
-            joints.append(L.ik(po))
-        i+=1
-    start_walk_joints = np.hstack(joints)
     print("Computed Joints")
-    print(start_walk_joints)
+    print(start_walk)
 
     time_r = 1000
     for i in range(time_r):
-        d.apply_action_pos(zeros*(time_r-i)/float(time_r) + i/float(time_r) * start_walk_joints)
+        d.apply_action_pos(zeros*(time_r-i)/float(time_r) + i/float(time_r) * start_walk)
         p.stepSimulation()
         time.sleep(1./rate)
 
     while True:
         for i in range(T_cycle):
             normalized_time = float(i)/float(T_cycle-1)
-            positions = gait_controller.step(normalized_time)
-            joints = []
-            i = 0
-            for po in positions:
-                if i==0:
-                    print(po)
-                if i < 2:
-                    joints.append(L.ik(po, sign=1))
-                else:
-                    joints.append(L.ik(po))
-                i += 1
-            # print("Computed Joints")
-            joints = np.hstack(joints)
-            # print(joints)
+            joints = gait_controller.step(normalized_time)
             d.apply_action_pos(joints)
             p.stepSimulation()
             time.sleep(1./rate)
