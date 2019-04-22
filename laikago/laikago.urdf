@@ -13,7 +13,7 @@
       <origin rpy="0 0 0" xyz="0 0 0.043794"/>
       <geometry>
       	
-				<mesh filename="package://dog_locomotion/laikago/chassis.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/chassis.stl" scale="1 1 1"/>
       </geometry>
        <material name="yellow">
         <color rgba="0.95 0.75 0.05 1"/>
@@ -23,7 +23,7 @@
       <origin rpy="-1.57 0 0" xyz="0 0 0.043794"/>
       <geometry>
       	
-				<mesh filename="package://dog_locomotion/laikago/chassis_vhacd_mod.obj" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/chassis_vhacd_mod.obj" scale="1 1 1"/>
       </geometry>
     </collision>
   </link>
@@ -43,7 +43,7 @@
 	  <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
        <material name="green"/>
     </visual>
@@ -51,7 +51,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     </link>
@@ -77,7 +77,7 @@
        <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_mirror.stl" scale="1 1 1"/>
       </geometry>
        <material name="blue"/>
     </visual>
@@ -85,7 +85,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_right_vhacd.obj" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_right_vhacd.obj" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -112,7 +112,7 @@
        <visual>
       <origin rpy="0 1.57079 0" xyz="0 0.0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
        <material name="red"/>
     </visual>
@@ -120,7 +120,7 @@
     <collision>
       <origin rpy="0 1.57079 0" xyz="0 0.0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -149,7 +149,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
       </geometry>
        <material name="green">
         <color rgba="0.23 0.73 0.33 1"/>
@@ -159,7 +159,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -187,7 +187,7 @@
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
       	
-				<mesh filename="package://dog_locomotion/laikago/upper_leg.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg.stl" scale="1 1 1"/>
       </geometry>
        <material name="blue">
         <color rgba="0.28 0.52 0.93 1"/>
@@ -197,7 +197,7 @@
      <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_left_vhacd.obj" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_left_vhacd.obj" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -226,7 +226,7 @@
    <visual>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
        <material name="red">
         <color rgba="0.85 0.19 0.21 1"/>
@@ -236,7 +236,7 @@
      <collision>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -269,7 +269,7 @@
 	  <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
        <material name="green"/>
     </visual>
@@ -277,7 +277,7 @@
      <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor_mirror.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -304,7 +304,7 @@
        <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_mirror.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_mirror.stl" scale="1 1 1"/>
       </geometry>
        <material name="blue"/>
     </visual>
@@ -312,7 +312,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_right_vhacd.obj" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_right_vhacd.obj" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -339,7 +339,7 @@
        <visual>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
        <material name="red"/>
     </visual>
@@ -347,7 +347,7 @@
      <collision>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -375,7 +375,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
       </geometry>
        <material name="green"/>
     </visual>
@@ -383,7 +383,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/hip_motor.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -411,7 +411,7 @@
      <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg.stl" scale="1 1 1"/>
       </geometry>
        <material name="blue"/>
     </visual>
@@ -419,7 +419,7 @@
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/upper_leg_left_vhacd.obj" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/upper_leg_left_vhacd.obj" scale="1 1 1"/>
       </geometry>
     </collision>
     
@@ -448,7 +448,7 @@
    <visual>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
        <material name="red"/>
     </visual>
@@ -456,7 +456,7 @@
     <collision>
       <origin rpy="0 1.57079 0" xyz="0 0 0"/>
       <geometry>
-				<mesh filename="package://dog_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
+				<mesh filename="package://jelly_locomotion/laikago/lower_leg_3.stl" scale="1 1 1"/>
       </geometry>
     </collision>
     

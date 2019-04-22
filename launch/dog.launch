@@ -15,7 +15,7 @@
       <!-- command="$(find xacro)/xacro '$(find blue_descriptions)/robots/blue_full_v$(arg ver).urdf.xacro'" /> -->
 
   <param name="robot_description"
-    textfile="$(find dog_locomotion)/laikago/laikago.urdf" />
+    textfile="$(find jelly_locomotion)/laikago/laikago.urdf" />
 
   <param
     name="use_gui"
@@ -32,5 +32,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find dog_locomotion)/urdf.rviz" />
+    args="-d $(find jelly_locomotion)/urdf.rviz" />
 </launch>
