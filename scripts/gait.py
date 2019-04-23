@@ -3,7 +3,7 @@ import robotics_math as rm
 from leg_kin import Leg
 
 class Gait:
-    def __init__(self, phis, betas, p1_fl, p2_fl, p1_fr, p2_fr, p1_rl, p2_rl, p1_rr, p2_rr, mode=None):
+    def __init__(self, phis, betas, p1_fl, p2_fl, p1_fr, p2_fr, p1_rl, p2_rl, p1_rr, p2_rr, mode=None, height=0.08):
         # Leg order Convention FL, FR, RL, RR
         #                      11  22  33  44
         self.phis  = phis
@@ -11,6 +11,7 @@ class Gait:
         self.p1 = [p1_fl, p1_fr, p1_rl, p1_rr]
         self.p2 = [p2_fl, p2_fr, p2_rl, p2_rr]
         self._leg = Leg()
+        self.height = height
 
         self.front_sign = -1
         self.rear_sign  = -1
@@ -58,7 +59,7 @@ class Gait:
         assert rel_time <= 1
         assert rel_time >= 0
         self.p2 + np.cos(rel_time*np.pi/2)
-        height = 0.08
+        height = self.height
         return self.p1[i] * rel_time + self.p2[i] * (1 - rel_time) + np.array([0, 0, height * np.sin(rel_time * np.pi)])
 
     def step(self, time_idx):
@@ -81,6 +82,17 @@ class Gait:
 
         return np.hstack(joints)
 
+    def set_height(self, h):
+        self.height = h
+
+class SimpleSideGait(Gait):
+    def __init__(self, beta, p1, p2, mode=None):
+        assert beta < 1
+        assert beta >= 0.75
+        phis = [0, beta - 0.5, 0.5, beta]
+        betas =[beta, beta, beta, beta]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+
 class SimpleWalkingGait(Gait):
     def __init__(self, beta, p1, p2, mode=None):
         assert beta < 1
@@ -89,3 +101,41 @@ class SimpleWalkingGait(Gait):
         phis = [0, 0.5, beta, beta - 0.5]
         betas =[beta, beta, beta, beta]
         Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+
+
+class TrotGait(Gait):
+    def __init__(self, p1, p2, mode=None):
+        beta = 0.5
+        phis = [0, 0.5, 0.5, 0]
+        betas =[beta, beta, beta, beta]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+
+class BoundGait(Gait):
+    def __init__(self, p1, p2, mode=None):
+        beta = 0.5
+        phis = [0.5, 0.5, 0.0, 0.0]
+        betas =[beta, beta, beta, beta]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        for i in range(len(self.p1)):
+            if i < 2:
+                self.p1[i] += np.array([-0.05,0 , -0.05])
+                self.p2[i] += np.array([-0.05,0,  -0.05])
+            else:
+                self.p1[i] += np.array([0.04,0 ,0.05])
+                self.p2[i] += np.array([-0.04,0 ,0.05])
+
+    def swing(self, i, rel_time):
+        assert rel_time <= 1
+        assert rel_time >= 0
+        self.p2 + np.cos(rel_time*np.pi/2)
+        height = self.height
+        if i > 1:
+            height += 0.1
+
+        return self.p1[i] * rel_time + self.p2[i] * (1 - rel_time) + np.array([0, 0, height * np.sin(rel_time * np.pi)])
+
+    def stance(self, i, rel_time):
+        assert rel_time <= 1
+        assert rel_time >= 0
+        height = self.height
+        return self.p2[i] * rel_time + self.p1[i] * (1 - rel_time) + np.array([0, 0, -height * np.sin(rel_time * np.pi)])

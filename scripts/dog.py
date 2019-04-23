@@ -5,7 +5,7 @@ from scipy.linalg import block_diag
 import PyKDL as kdl
 import kdl_parser_py.urdf as kdl_parser
 import robotics_math as rm
-from gait import SimpleWalkingGait
+import gait as gaits
 from leg_kin import Leg
 
 MOTOR_NAMES = [
@@ -384,12 +384,32 @@ if __name__=="__main__":
         # d.apply_action_pos(home_joint_position*(time_r-i)/float(time_r) + i/float(time_r) * stand_joint_position)
         # p.stepSimulation()
         # time.sleep(1./rate)
+
+    ######################### Walking ###################################
     offset = 0.07
     p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.94e-01])
     p2 = np.array([-1.85e-01, 4.5e-02, -3.94e-01])
-
-    gait_controller = SimpleWalkingGait(0.9, p1, p2, mode="reverse_crab")
+    gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab")
     T_cycle = 800
+    ##########################################################################
+
+    ######################### SideStep ###################################
+    # offset = 0.0
+    # p1 = np.array([offset ,-0.1 +  0.1e-01, -4.24e-01])
+    # p2 = np.array([offset, -0.1 + -0.1e-01, -4.24e-01])
+    # gait_controller = gaits.SimpleSideGait(0.85, p1, p2, mode="reverse_crab")
+    # gait_controller.set_height(0.20)
+    # T_cycle = 2400
+    ############################################################################
+
+    ########################## Bounding  ###################################
+    offset = 0.07
+    p1 = np.array([offset + 0.95e-01, -0.5e-01, -3.94e-01])
+    p2 = np.array([-1.25e-01        , -0.5e-01, -3.94e-01])
+    gait_controller = gaits.BoundGait(p1, p2, mode=None)
+    gait_controller.set_height(0.09)
+    T_cycle = 300
+    ##############################################################################
 
     joints = []
     start_walk = gait_controller.step(0.0)
@@ -402,9 +422,19 @@ if __name__=="__main__":
         p.stepSimulation()
         time.sleep(1./rate)
 
+    time_inc = 1.0/T_cycle
+    normalized_time = 0
+
+    reverse_time =  rate * 5
     while True:
-        for i in range(T_cycle):
-            normalized_time = float(i)/float(T_cycle-1)
+        for _ in range(reverse_time):
+            normalized_time = (normalized_time + time_inc)% 1.0
+            joints = gait_controller.step(normalized_time)
+            d.apply_action_pos(joints)
+            p.stepSimulation()
+            time.sleep(1./rate)
+        for _ in range(reverse_time):
+            normalized_time = (normalized_time - time_inc)% 1.0
             joints = gait_controller.step(normalized_time)
             d.apply_action_pos(joints)
             p.stepSimulation()
