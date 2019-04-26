@@ -110,6 +110,16 @@ class SimpleWalkingGait(Gait):
         betas =[beta, beta, beta, beta]
         Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
 
+class Jump(Gait):
+    def __init__(self, beta, h, p1, p2, mode=None):
+        assert beta < 1
+        assert beta >= 0.75
+        self.set_height(h)
+
+        phis = [0, 0, 0, 0]
+        betas =[beta, beta, beta, beta]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+
 class TurningGait(Gait):
     def __init__(self, p1f, p2f, p1r, p2r, mode=None):
         beta = 0.8
