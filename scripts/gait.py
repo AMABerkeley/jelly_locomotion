@@ -91,7 +91,15 @@ class SimpleSideGait(Gait):
         assert beta >= 0.75
         phis = [0, beta - 0.5, 0.5, beta]
         betas =[beta, beta, beta, beta]
-        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        lp1 = p1.copy()
+        lp1[1] = -p1[1]
+        lp2 = p2.copy()
+        lp2[1] = -p2[1]
+
+        rp1 = p1.copy()
+        rp2 = p2.copy()
+
+        Gait.__init__(self, phis, betas, rp1, rp2, lp1, lp2, rp1, rp2, lp1, lp2, mode=mode)
 
 class SimpleWalkingGait(Gait):
     def __init__(self, beta, p1, p2, mode=None):
@@ -101,6 +109,18 @@ class SimpleWalkingGait(Gait):
         phis = [0, 0.5, beta, beta - 0.5]
         betas =[beta, beta, beta, beta]
         Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+
+class TurningGait(Gait):
+    def __init__(self, p1f, p2f, p1r, p2r, mode=None):
+        beta = 0.8
+
+        phis = [0, beta - 0.5, beta, 0.5]
+        betas =[beta, beta, beta, beta]
+        neg_mult_left = np.array([1,-1,1])
+
+        print("qwerqewrqewr")
+        print(p1f*neg_mult_left)
+        Gait.__init__(self, phis, betas, p1f, p2f, neg_mult_left*p1f, neg_mult_left*p2f, p1r, p2r, neg_mult_left*p1r, neg_mult_left*p2r, mode=mode)
 
 
 class TrotGait(Gait):

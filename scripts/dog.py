@@ -385,31 +385,51 @@ if __name__=="__main__":
         # p.stepSimulation()
         # time.sleep(1./rate)
 
-    ######################### Walking ###################################
-    offset = 0.07
-    p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.94e-01])
-    p2 = np.array([-1.85e-01, 4.5e-02, -3.94e-01])
-    gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab")
-    T_cycle = 800
-    ##########################################################################
+    ####################### Walking ###################################
+    # offset = 0.07
+    # p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.94e-01])
+    # p2 = np.array([-1.85e-01, 4.5e-02, -3.94e-01])
+    # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab")
+    # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode=None)
+    # T_cycle = 400
+    #######################################################################
 
-    ######################### SideStep ###################################
+    ####################### Turning ###################################
+    offset = 0.07
+    p1l = np.array([ 0.85e-01,   0.4e-01, -3.94e-01])
+    p2l = np.array([ 0.85e-01,  -0.4e-01, -3.94e-01])
+
+    p1r = np.array([-1.85e-01,  -0.4e-01, -3.94e-01])
+    p2r = np.array([-1.85e-01,   0.4e-01, -3.94e-01])
+    gait_controller = gaits.TurningGait(p1l, p2l, p1r, p2r, mode="reverse_crab")
+    T_cycle = 900
+    ########################################################################
+
+    ####################### Troting ###################################
+    # offset = 0.07
+    # p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.04e-01])
+    # p2 = np.array([-1.85e-01, 4.5e-02, -4.14e-01])
+    # gait_controller = gaits.TrotGait(p1, p2, mode="reverse_crab")
+    # T_cycle = 400
+    ########################################################################
+
+    ######################## SideStep ###################################
     # offset = 0.0
-    # p1 = np.array([offset ,-0.1 +  0.1e-01, -4.24e-01])
-    # p2 = np.array([offset, -0.1 + -0.1e-01, -4.24e-01])
+    # p1 = np.array([offset ,-0.1 +  0.5e-01, -4.24e-01])
+    # p2 = np.array([offset, -0.1 + -0.5e-01, -4.24e-01])
     # gait_controller = gaits.SimpleSideGait(0.85, p1, p2, mode="reverse_crab")
     # gait_controller.set_height(0.20)
     # T_cycle = 2400
-    ############################################################################
+    ###########################################################################
 
-    ########################## Bounding  ###################################
-    offset = 0.07
-    p1 = np.array([offset + 0.95e-01, -0.5e-01, -3.94e-01])
-    p2 = np.array([-1.25e-01        , -0.5e-01, -3.94e-01])
-    gait_controller = gaits.BoundGait(p1, p2, mode=None)
-    gait_controller.set_height(0.09)
-    T_cycle = 300
-    ##############################################################################
+    ######################### Bounding  ###################################
+    # offset = 0.07
+    # p1 = np.array([offset + 0.95e-01, -0.5e-01, -3.94e-01])
+    # p2 = np.array([-1.25e-01        , -0.5e-01, -3.94e-01])
+    # gait_controller = gaits.BoundGait(p1, p2, mode=None)
+    # gait_controller.set_height(0.09)
+    # T_cycle = 300
+    #############################################################################
 
     joints = []
     start_walk = gait_controller.step(0.0)
@@ -425,7 +445,7 @@ if __name__=="__main__":
     time_inc = 1.0/T_cycle
     normalized_time = 0
 
-    reverse_time =  rate * 5
+    reverse_time =  rate * 10
     while True:
         for _ in range(reverse_time):
             normalized_time = (normalized_time + time_inc)% 1.0
