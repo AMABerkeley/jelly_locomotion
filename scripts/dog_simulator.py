@@ -5,7 +5,8 @@ from scipy.linalg import block_diag
 import PyKDL as kdl
 import kdl_parser_py.urdf as kdl_parser
 import robotics_math as rm
-import jelly_gaits as gaits
+import gait as gaits
+from leg_kin import Leg
 
 MOTOR_NAMES = [
         "FL_hip_joint", "FL_upper_leg_joint", "FL_lower_leg_joint", # leg 1
