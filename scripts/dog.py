@@ -1,11 +1,12 @@
+import sys
+sys.path.append('../src/jelly_locomotion')
 import pybullet as p
 import time
 import numpy as np
 from scipy.linalg import block_diag
-import PyKDL as kdl
-import kdl_parser_py.urdf as kdl_parser
 import robotics_math as rm
 import jelly_gaits as gaits
+
 
 MOTOR_NAMES = [
         "FL_hip_joint", "FL_upper_leg_joint", "FL_lower_leg_joint", # leg 1
@@ -15,43 +16,6 @@ MOTOR_NAMES = [
 ]
 
 class Dog:
-    def prepare_kin_dyn(self):
-        flag, self.tree = kdl_parser.treeFromFile("data/jelly/jelly.urdf")
-
-        chain = self.tree.getChain(self.base_link, self.bl_link)
-        self.fk_bl = kdl.ChainFkSolverPos_recursive(chain)
-        self.jac_bl = kdl.ChainJntToJacSolver(chain)
-
-        chain = self.tree.getChain(self.base_link, self.br_link)
-        self.fk_br = kdl.ChainFkSolverPos_recursive(chain)
-        self.jac_br = kdl.ChainJntToJacSolver(chain)
-
-        chain = self.tree.getChain(self.base_link, self.fl_link)
-        self.fk_fl = kdl.ChainFkSolverPos_recursive(chain)
-        self.jac_fl = kdl.ChainJntToJacSolver(chain)
-
-        chain = self.tree.getChain(self.base_link, self.fr_link)
-        self.fk_fr = kdl.ChainFkSolverPos_recursive(chain)
-        self.jac_fr = kdl.ChainJntToJacSolver(chain)
-
-        # convention front_right, front_left, back_right, back_left
-        self.jac_list = [self.jac_fl, self.jac_fr, self.jac_bl, self.jac_br]
-        self.fk_list  = [self.fk_fl , self.fk_fr , self.fk_bl , self.fk_br ]
-
-        joints = kdl.JntArray(3)
-        joints[0] = 0
-        joints[1] = 0
-        joints[2] = 0
-        frame = kdl.Frame()
-        jk_list = self.fk_list
-        print(jk_list[0].JntToCart(joints, frame))
-        print(frame)
-        print(jk_list[1].JntToCart(joints, frame))
-        print(frame)
-        print(jk_list[2].JntToCart(joints, frame))
-        print(frame)
-        print(jk_list[3].JntToCart(joints, frame))
-        print(frame)
 
     def __init__(self, quadruped):
         self.q = quadruped
@@ -61,7 +25,6 @@ class Dog:
         self.br_link   = "RR_lower_leg"
         self.fl_link   = "FL_lower_leg"
         self.fr_link   = "FR_lower_leg"
-        self.prepare_kin_dyn()
         self._BuildJointNameToIdDict()
         self._BuildMotorIdList()
 
@@ -205,127 +168,6 @@ class Dog:
         com_ori = list(self.GetBaseOrientation())
         return com_pos, com_ori, pos, vel
 
-    def compute_balance(self, pos_des, vel_des, ori_des, ang_des, f_prev, stance):
-
-        p_c, curr_ori, joint_pos, joint_vel = self.GetState()
-        curr_ori = rm.quat_to_rot(curr_ori)
-
-        p_ = []
-        for i in range(4):
-            frame = kdl.Frame()
-
-            joints = kdl.JntArray(3)
-            joints[0] = joint_pos[i+ 0]
-            joints[1] = joint_pos[i+ 1]
-            joints[2] = joint_pos[i+ 2]
-            self.fk_list[i].JntToCart(joints, frame)
-
-            frame_p = np.array([frame.p[0], frame.p[1], frame.p[2]])
-
-            foot_pos = p_c + frame_p
-            p_.append(foot_pos)
-
-
-        vel = 0
-        curr_ori = np.ones((3, 3))
-        curr_angular = np.zeros((3, 1))
-
-
-        acc         = self.kpp * (pos_des - p_c) + self.kdp * (vel_des - vel)
-        print("acceaccell: {}".format(acc))
-
-        orientation_error = 0
-        # orientation_error = np.log(ori_des.dot(curr_ori))
-
-        angular_acc = self.kpw * orientation_error + self.kdw * (ang_des.reshape(3,1) - curr_angular)
-        print("angular accel: {}".format(angular_acc))
-
-        constraints = []
-        theta = np.pi/4
-        for s in stance:
-            if s:
-                cons = np.array([
-                    [ 1, 0, -np.tan(theta)],
-                    [-1, 0, -np.tan(theta)],
-                    [0,  1, -np.tan(theta)],
-                    [0, -1, -np.tan(theta)],
-                    [0, 0, -1]
-                ])
-            else:
-                print("error")
-                cons = np.array([
-                    [ 1, 0,  0],
-                    [-1, 0,  0],
-                    [0,  1,  0],
-                    [0, -1,  0],
-                    [0,  0,  1],
-                    [0,  0, -1]
-                ])
-            constraints.append(cons)
-
-        eye3 = np.eye(3)
-        alpha = 0.001
-        beta = 0.001
-
-        Atop = np.hstack((eye3, eye3, eye3, eye3))
-        Abot = np.hstack((rm.skew_3d(p_[0]-p_c), rm.skew_3d(p_[1]-p_c), rm.skew_3d(p_[2]-p_c), rm.skew_3d(p_[3]-p_c)))
-        A = np.vstack([Atop, Abot])
-
-        S = 10*np.eye(6)
-        g = np.array([0, 0, -9.8])
-
-        m = 25.0
-        Ig = 1.1*np.eye(3)
-
-        bd_top = m  * (acc + g)
-        angular_acc = angular_acc.reshape(3,1)
-        bd_bot = Ig.dot(angular_acc)
-        bd = np.vstack((bd_top.reshape(3,1), bd_bot))
-
-        P =  2 * (np.dot(np.dot( A.T, S), A) + (alpha + beta) * np.eye(12))
-        q = -2 * (np.dot(np.dot(bd.T, S), A) + beta * f_prev)
-
-        G = block_diag(*constraints)
-
-        num_h = G.shape[0]
-        h = np.zeros(num_h)
-        q = q.reshape(-1)
-
-
-        F_opt = rm.quadprog_solve_qp(P, q, G=G, h=h)
-        # print(F_opt)
-
-        # F_opt = np.linalg.solve(np.dot(A.T, A) + 0.1*np.eye(12),np.dot(A.T, bd))
-        # print(F_opt)
-        return F_opt
-
-    def force_to_torques(self, forces, joint_positions):
-        # TODO test (correct reference frame?????)
-        torques = []
-        i = 0
-        for f, j in zip(forces, joint_positions):
-            jacobian = kdl.Jacobian(3)
-            joints = kdl.JntArray(3)
-            joints[0] = joint_positions[i+ 0]
-            joints[1] = joint_positions[i+ 1]
-            joints[2] = joint_positions[i+ 2]
-            self.jac_list[i].JntToJac(joints, jacobian)
-            jacobian = rm.jac_to_np(jacobian)
-            f.reshape(3,1)
-            f = np.vstack([f.reshape(3,1), np.zeros((3,1))])
-            t = (jacobian.T).dot(f)
-            torques.append(t)
-            i += 1
-        return torques
-
-    def compute_action(self, pos_des, vel_des, ori_des, ang_des, stance):
-        # state =  self.get_state
-        f_prev = 0
-        foot_forces = self.compute_balance(pos_des, vel_des, ori_des, ang_des, f_prev, stance)
-        foot_forces = foot_forces.reshape(4, 3)
-        p_c, curr_ori, joint_pos, joint_vel = self.GetState()
-        joint_torques = self.force_to_torques(foot_forces, joint_pos)
-        return np.array(joint_torques).flatten()
 
     def apply_action(self, action):
         print(action)
@@ -385,23 +227,23 @@ if __name__=="__main__":
         # time.sleep(1./rate)
 
     ####################### Walking ###################################
-    # offset = 0.07
-    # p1 = np.array([offset + 1.85e-01, 4.5e-02, -3.94e-01])
-    # p2 = np.array([-1.85e-01, 4.5e-02, -3.94e-01])
-    # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab")
-    # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode=None)
-    # T_cycle = 400
+    offset = 0.07
+    p1 = np.array([offset + 1.85e-01, -9.5e-02, -3.94e-01])
+    p2 = np.array([-1.85e-01        , -9.5e-02, -3.94e-01])
+    gait_controller = gaits.SimpleWalkingGait(0.95, p1, p2, mode="reverse_crab")
+    gait_controller = gaits.SimpleWalkingGait(0.95, p1, p2, mode=None)
+    T_cycle = 1400
     #######################################################################
 
     ####################### Turning ###################################
-    offset = 0.07
-    p1l = np.array([ 0.85e-01,   0.4e-01, -3.94e-01])
-    p2l = np.array([ 0.85e-01,  -0.4e-01, -3.94e-01])
-
-    p1r = np.array([-1.85e-01,  -0.4e-01, -3.94e-01])
-    p2r = np.array([-1.85e-01,   0.4e-01, -3.94e-01])
-    gait_controller = gaits.TurningGait(p1l, p2l, p1r, p2r, mode="reverse_crab")
-    T_cycle = 1200
+    # offset = 0.07
+    # p1l = np.array([ 0.85e-01,   0.4e-01, -3.94e-01])
+    # p2l = np.array([ 0.85e-01,  -0.4e-01, -3.94e-01])
+#
+    # p1r = np.array([-1.85e-01,  -0.4e-01, -3.94e-01])
+    # p2r = np.array([-1.85e-01,   0.4e-01, -3.94e-01])
+    # gait_controller = gaits.TurningGait(p1l, p2l, p1r, p2r, mode="reverse_crab")
+    # T_cycle = 1200
     ########################################################################
 
     ####################### Jump ###################################
