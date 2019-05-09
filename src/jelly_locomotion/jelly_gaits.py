@@ -86,7 +86,7 @@ class Gait:
         self.height = h
 
 class SimpleSideGait(Gait):
-    def __init__(self, beta, p1, p2, mode=None):
+    def __init__(self, beta, p1, p2, mode=None, height=0.08):
         assert beta < 1
         assert beta >= 0.75
         phis = [0, beta - 0.5, 0.5, beta]
@@ -99,29 +99,29 @@ class SimpleSideGait(Gait):
         rp1 = p1.copy()
         rp2 = p2.copy()
 
-        Gait.__init__(self, phis, betas, rp1, rp2, lp1, lp2, rp1, rp2, lp1, lp2, mode=mode)
+        Gait.__init__(self, phis, betas, rp1, rp2, lp1, lp2, rp1, rp2, lp1, lp2, mode=mode, height=height)
 
 class SimpleWalkingGait(Gait):
-    def __init__(self, beta, p1, p2, mode=None):
+    def __init__(self, beta, p1, p2, mode=None, height=0.08):
         assert beta < 1
         assert beta >= 0.75
 
         phis = [0, 0.5, beta, beta - 0.5]
         betas =[beta, beta, beta, beta]
-        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
 
 class Jump(Gait):
-    def __init__(self, beta, h, p1, p2, mode=None):
+    def __init__(self, beta, h, p1, p2, mode=None, height=0.08):
         assert beta < 1
         assert beta >= 0.75
         self.set_height(h)
 
         phis = [0, 0, 0, 0]
         betas =[beta, beta, beta, beta]
-        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
 
 class TurningGait(Gait):
-    def __init__(self, p1f, p2f, p1r, p2r, mode=None):
+    def __init__(self, p1f, p2f, p1r, p2r, mode=None, height=0.08):
         beta = 0.8
 
         phis = [0, beta - 0.5, beta, 0.5]
@@ -130,22 +130,22 @@ class TurningGait(Gait):
 
         # print("qwerqewrqewr")
         # print(p1f*neg_mult_left)
-        Gait.__init__(self, phis, betas, p1f, p2f, neg_mult_left*p1f, neg_mult_left*p2f, p1r, p2r, neg_mult_left*p1r, neg_mult_left*p2r, mode=mode)
+        Gait.__init__(self, phis, betas, p1f, p2f, neg_mult_left*p1f, neg_mult_left*p2f, p1r, p2r, neg_mult_left*p1r, neg_mult_left*p2r, mode=mode, height=height)
 
 
 class TrotGait(Gait):
-    def __init__(self, p1, p2, mode=None):
+    def __init__(self, p1, p2, mode=None, height=0.08):
         beta = 0.5
         phis = [0, 0.5, 0.5, 0]
         betas =[beta, beta, beta, beta]
-        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
 
 class BoundGait(Gait):
-    def __init__(self, p1, p2, mode=None):
+    def __init__(self, p1, p2, mode=None, height=0.08):
         beta = 0.5
         phis = [0.5, 0.5, 0.0, 0.0]
         betas =[beta, beta, beta, beta]
-        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode)
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
         for i in range(len(self.p1)):
             if i < 2:
                 self.p1[i] += np.array([-0.05,0 , -0.05])

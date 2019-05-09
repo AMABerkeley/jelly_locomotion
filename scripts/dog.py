@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../src/jelly_locomotion')
 import pybullet as p
 import time
 import numpy as np
@@ -395,12 +397,12 @@ if __name__=="__main__":
 
     ####################### Turning ###################################
     offset = 0.07
-    p1l = np.array([ 0.85e-01,   0.4e-01, -3.94e-01])
+    p1l = np.array([ 0.85e-01,  0.4e-01, -3.94e-01])
     p2l = np.array([ 0.85e-01,  -0.4e-01, -3.94e-01])
 
     p1r = np.array([-1.85e-01,  -0.4e-01, -3.94e-01])
-    p2r = np.array([-1.85e-01,   0.4e-01, -3.94e-01])
-    gait_controller = gaits.TurningGait(p1l, p2l, p1r, p2r, mode="reverse_crab")
+    p2r = np.array([-1.85e-01,  0.4e-01, -3.94e-01])
+    gait_controller = gaits.TurningGait(p1l, p2l, p1r, p2r, mode="reverse_crab", height=0.21)
     T_cycle = 1200
     ########################################################################
 
