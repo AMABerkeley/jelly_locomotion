@@ -330,15 +330,35 @@ class Dog:
         return np.array(joint_torques).flatten()
 
     def apply_action(self, action):
-        print(action)
+        # print(action)
         for j in range (12):
             targetForce = float(action[j])
+            p.setJointMotorControl2(self.q, self.jointIds[j], p.VELOCITY_CONTROL, force=0.0)
+            p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, force=0.0)
+            # p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, 0, force=0)
             p.setJointMotorControl2(self.q, self.jointIds[j], p.TORQUE_CONTROL, force=targetForce)
 
     def apply_action_pos(self, action):
-        for j in range (12):
-            targetPos = float(action[j])
-            p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, targetPos, force=1000)
+        self.pd_control(action)
+        # for j in range (12):
+            # targetPos = float(action[j])
+            # p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, targetPos, force=1000)
+
+    def pd_control(self, positions):
+        torques = []
+        _, _, joint_pos, joint_vel = self.GetState()
+        kp = 1.2
+        kd = 100.0
+        ff = 0.0
+        print("pos command", positions)
+        print("current joints",  joint_pos)
+        for p_des, p_curr, v_curr in zip(positions, joint_pos, joint_vel):
+
+            t = 0 + kp*(p_des - p_curr) + kd * (-v_curr)
+            torques.append(t)
+        # print(torques)
+
+        self.apply_action(torques)
 
 
 if __name__=="__main__":
@@ -388,8 +408,8 @@ if __name__=="__main__":
 
     ####################### Walking ###################################
     offset = 0.07
-    p1 = np.array([offset + 1.85e-01, 2.5e-02, -4.20e-01])
-    p2 = np.array([-1.85e-01, 2.5e-02, -4.20e-01])
+    p1 = np.array([offset + 1.85e-01, -0.5e-02, -4.00e-01])
+    p2 = np.array([-1.85e-01, -0.5e-02, -4.00e-01])
     gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab", height=0.2)
     # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode=None)
     T_cycle = 800

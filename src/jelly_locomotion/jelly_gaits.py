@@ -50,6 +50,12 @@ class Gait:
                 rel_time = time_slice / (1.0 - beta)
         return stance_bool, rel_time
 
+    def check_stance_swing(self, time_idx):
+        check_stance = []
+        for i in range(4):
+            check_stance.append(_is_stance_and_time(i, time_idx))
+        return check_stance
+
     def stance(self, i, rel_time):
         assert rel_time <= 1
         assert rel_time >= 0
