@@ -339,10 +339,10 @@ class Dog:
             p.setJointMotorControl2(self.q, self.jointIds[j], p.TORQUE_CONTROL, force=targetForce)
 
     def apply_action_pos(self, action):
-        self.pd_control(action)
-        # for j in range (12):
-            # targetPos = float(action[j])
-            # p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, targetPos, force=1000)
+        # self.pd_control(action)
+        for j in range (12):
+            targetPos = float(action[j])
+            p.setJointMotorControl2(self.q, self.jointIds[j], p.POSITION_CONTROL, targetPos, force=1000)
 
     def pd_control(self, positions):
         torques = []
