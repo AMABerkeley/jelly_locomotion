@@ -1,7 +1,6 @@
 import numpy as np
 import robotics_math as rm
 
-
 class Leg:
     def __init__(self):
 
@@ -11,7 +10,6 @@ class Leg:
         self.twist = np.ndarray((6,3))
 
         Ls = np.array([0.046, 0.25, 0.25116])
-        # Ls = np.array([0.25, 0.25, 0.25])
 
         self.q[0:3,0] = [0,    0, 0]
         self.q[0:3,1] = [0, Ls[0], 0]

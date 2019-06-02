@@ -149,6 +149,3 @@ def jac_to_np(jacobian):
         for idx_r in range(jacobian.rows()):
             res[idx_r, idx_c] = col[idx_r]
     return res
-
-
-
