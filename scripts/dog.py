@@ -406,11 +406,20 @@ if __name__=="__main__":
         # p.stepSimulation()
         # time.sleep(1./rate)
 
-    ####################### Walking ###################################
+    ###################### Walking ###################################
+    # offset = 0.07
+    # p1 = np.array([offset + 1.85e-01, -0.5e-02, -4.00e-01])
+    # p2 = np.array([-1.85e-01, -0.5e-02, -4.00e-01])
+    # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab", height=0.2)
+    # T_cycle = 800
+    ######################################################################
+
+    ####################### Mirror Walking ###################################
     offset = 0.07
-    p1 = np.array([offset + 1.85e-01, -0.5e-02, -4.00e-01])
-    p2 = np.array([-1.85e-01, -0.5e-02, -4.00e-01])
-    gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode="reverse_crab", height=0.2)
+    # p1 = np.array([ 1.85e-01, -0.5e-02, -4.00e-01])
+    p1 = np.array([ 0.85e-01, -0.5e-02, -4.20e-01])
+    p2 = np.array([-1.05e-01, -0.5e-02, -4.20e-01])
+    gait_controller = gaits.SimpleMirrorWalkingGait(0.90, p1, p2, mode="reverse_crab", height=0.15)
     # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode=None)
     T_cycle = 800
     #######################################################################

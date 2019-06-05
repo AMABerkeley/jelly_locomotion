@@ -11,10 +11,10 @@ catkin_python_setup()
 
 find_package(roslaunch)
 
-foreach(dir launch)
-    install(DIRECTORY ${dir}/
-        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
-endforeach(dir)
+#foreach(dir launch)
+#    install(DIRECTORY ${dir}/
+#        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
+#endforeach(dir)
 
 include_directories(
     ${catin_INCLUDE_DIRS}
