@@ -6,10 +6,12 @@ This repository provides the basic framework for quadruped controls. This is for
 
 ## Dependencies
 * pyKDL
-  * pip install PyKDL
 * quadprog
-  * pip install quadprog
 * pybullet
-  * pip install pybullet
 * urdf parser
-  * pip install urdf-parser-py
+* scipy-stack
+  * ```pip install PyKDL```
+    ```pip install quadprog```
+    ```pip install urdf-parser-py```
+    ```pip install pybullet```
+    ```pip install scipy-stack```
