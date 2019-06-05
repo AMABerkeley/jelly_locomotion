@@ -116,6 +116,19 @@ class SimpleWalkingGait(Gait):
         betas =[beta, beta, beta, beta]
         Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
 
+class SimpleMirrorWalkingGait(Gait):
+    def __init__(self, beta, p1, p2, mode=None, height=0.08):
+        assert beta < 1
+        assert beta >= 0.75
+
+        phis = [0, 0.5, beta, beta - 0.5]
+        betas =[beta, beta, beta, beta]
+        p1_r = p1.copy()
+        p2_r = p2.copy()
+        p1_r[0] = -p1_r[0]
+        p2_r[0] = -p2_r[0]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p2_r, p1_r, p2_r, p1_r, mode=mode, height=height)
+
 class Jump(Gait):
     def __init__(self, beta, h, p1, p2, mode=None, height=0.08):
         assert beta < 1
