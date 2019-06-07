@@ -415,13 +415,18 @@ if __name__=="__main__":
     ######################################################################
 
     ####################### Mirror Walking ###################################
-    offset = 0.07
+    offset = 0.20
+    # offset = 0.0
     # p1 = np.array([ 1.85e-01, -0.5e-02, -4.00e-01])
-    p1 = np.array([ 0.85e-01, -0.5e-02, -4.20e-01])
-    p2 = np.array([-1.05e-01, -0.5e-02, -4.20e-01])
-    gait_controller = gaits.SimpleMirrorWalkingGait(0.90, p1, p2, mode="reverse_crab", height=0.15)
+    p1 = np.array([ 0.75e-01, -0.5e-02, -4.20e-01])
+    p2 = np.array([-0.55e-01, -0.5e-02, -4.20e-01])
+
+    # p1 = np.array([ 0.75e-01, -5.0e-02, -4.20e-01])
+    # p2 = np.array([-0.55e-01, -5.0e-02, -4.20e-01])
+    gait_controller = gaits.SimpleWalkingGait(0.90, p1, p2, mode="reverse_crab", height=0.15)
+    gait_controller = gaits.SimpleWalkingGaitEllipse(0.90, p1, p2, mode="reverse_crab", height=0.13)
     # gait_controller = gaits.SimpleWalkingGait(0.85, p1, p2, mode=None)
-    T_cycle = 800
+    T_cycle = 2000
     #######################################################################
 
     ####################### Turning ###################################

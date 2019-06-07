@@ -64,7 +64,6 @@ class Gait:
     def swing(self, i, rel_time):
         assert rel_time <= 1
         assert rel_time >= 0
-        self.p2 + np.cos(rel_time*np.pi/2)
         height = self.height
         return self.p1[i] * rel_time + self.p2[i] * (1 - rel_time) + np.array([0, 0, height * np.sin(rel_time * np.pi)])
 
@@ -115,6 +114,27 @@ class SimpleWalkingGait(Gait):
         phis = [0, 0.5, beta, beta - 0.5]
         betas =[beta, beta, beta, beta]
         Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
+
+class SimpleWalkingGaitEllipse(Gait):
+    def __init__(self, beta, p1, p2, mode=None, height=0.08):
+        assert beta < 1
+        assert beta >= 0.75
+
+        phis = [0, 0.5, beta, beta - 0.5]
+        betas =[beta, beta, beta, beta]
+        Gait.__init__(self, phis, betas, p1, p2, p1, p2, p1, p2, p1, p2, mode=mode, height=height)
+
+    def stance(self, i, rel_time):
+        assert rel_time <= 1
+        assert rel_time >= 0
+        height = self.height / 10.0
+        return self.p2[i] * rel_time + self.p1[i] * (1 - rel_time) + np.array([0, 0, height * np.sin(rel_time * np.pi)])
+
+    def swing(self, i, rel_time):
+        assert rel_time <= 1
+        assert rel_time >= 0
+        height = self.height
+        return self.p1[i] * rel_time + self.p2[i] * (1 - rel_time) + np.array([0, 0, height * np.sin(rel_time * np.pi)])
 
 class SimpleMirrorWalkingGait(Gait):
     def __init__(self, beta, p1, p2, mode=None, height=0.08):
